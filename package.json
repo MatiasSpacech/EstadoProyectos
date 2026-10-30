@@ -1,0 +1,23 @@
+{
+  "name": "estado-proyectos",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tablero kanban para llevar el control del estado de mis proyectos de software: pendientes, en proceso, bloqueados y completados.",
+  "scripts": {
+    "start": "python -m http.server 4173",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:update": "playwright test --update-snapshots"
+  },
+  "keywords": [
+    "kanban",
+    "proyectos",
+    "vanilla-js"
+  ],
+  "author": "Eduardo Matias Spacech",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.64.1"
+  }
+}

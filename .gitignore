@@ -1,0 +1,18 @@
+# Dependencias (solo tooling de tests)
+node_modules/
+
+# Salidas de Playwright
+test-results/
+playwright-report/
+blob-report/
+tests/artifacts/
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
