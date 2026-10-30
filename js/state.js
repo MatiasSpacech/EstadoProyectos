@@ -348,6 +348,12 @@
     }
     if ("dueDate" in source) task.dueDate = normalizeDate(source.dueDate);
     if ("blockedReason" in source) task.blockedReason = cleanText(source.blockedReason, 140);
+    if ("subtasks" in source && Array.isArray(source.subtasks)) {
+      task.subtasks = source.subtasks.map(normalizeSubtask).filter(Boolean).slice(0, 40);
+      task.subtasks.forEach((subtask, index) => {
+        subtask.order = index;
+      });
+    }
 
     if ("status" in source && isStatus(source.status)) {
       if (source.status !== task.status) placeTask(project, task, source.status, null);

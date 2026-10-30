@@ -320,7 +320,7 @@
             <input class="input" name="tags" type="text" autocomplete="off" spellcheck="false" placeholder="ui, api, bug">
           </label>
 
-          <label class="field" id="blocked-field" hidden>
+          <label class="field" data-blocked-field hidden>
             <span class="field__label">Motivo del bloqueo</span>
             <input class="input" name="blockedReason" type="text" maxlength="140" placeholder="Esperando respuesta del cliente…">
           </label>
@@ -329,7 +329,7 @@
             <span class="field__label">Subtareas</span>
             <ul class="subtask-list" data-subtasks></ul>
             <div class="subtask-add">
-              <input class="input" type="text" id="subtask-input" maxlength="100" placeholder="Nueva subtarea y Enter…">
+              <input class="input" type="text" data-subtask-input maxlength="100" placeholder="Nueva subtarea y Enter…">
               <button class="btn btn--ghost btn--sm" type="button" data-action="add-subtask">Añadir</button>
             </div>
           </div>
@@ -359,7 +359,7 @@
   </template>
 
   <div id="dialog-root"></div>
-  <ul class="toast-root" id="toast-root" aria-label="Avisos"></ul>
+  <ul class="toast-root" id="toast-root" aria-label="Avisos" aria-live="polite"></ul>
   <p class="sr-only" id="live-region" aria-live="polite"></p>
 
   <noscript>
@@ -370,8 +370,10 @@
   <script defer src="js/storage.js"></script>
   <script defer src="js/seed.js"></script>
   <script defer src="js/state.js"></script>
+  <script defer src="js/markdown.js"></script>
   <script defer src="js/render.js"></script>
   <script defer src="js/dragdrop.js"></script>
+  <script defer src="js/modals.js"></script>
   <script defer src="js/app.js"></script>
 </body>
 </html>

@@ -687,6 +687,7 @@ textarea.input {
 .dialog {
   width: min(620px, calc(100vw - 32px));
   max-height: min(86dvh, 820px);
+  margin: auto;
   padding: 0;
   border: 1px solid var(--line-strong);
   border-radius: var(--r-lg);
@@ -746,6 +747,7 @@ textarea.input {
   gap: var(--sp-3);
   padding: var(--sp-4) var(--sp-5);
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .dialog__body--task {
@@ -1399,4 +1401,125 @@ body.is-touch-dragging .task {
 .dash-card__next-empty {
   color: var(--muted-dim);
   font-style: italic;
+}
+
+/* ==========================================================================
+   Menús flotantes, validación y variantes de avisos
+   ========================================================================== */
+
+.menu {
+  position: fixed;
+  z-index: 70;
+  min-width: 208px;
+  padding: 5px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  background: rgba(16, 22, 37, 0.98);
+  box-shadow: var(--shadow-3), 0 0 44px -22px var(--accent-glow);
+  backdrop-filter: blur(12px);
+  animation: menu-in var(--dur) var(--ease-out);
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.985);
+  }
+}
+
+.menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: var(--r-xs);
+  color: var(--text-soft);
+  font-size: var(--fs-sm);
+  text-align: left;
+}
+
+.menu__item:hover,
+.menu__item:focus-visible {
+  background: rgba(126, 166, 255, 0.1);
+  color: var(--text);
+  outline: none;
+}
+
+.menu__item--danger {
+  color: var(--red);
+}
+
+.menu__item--danger:hover,
+.menu__item--danger:focus-visible {
+  background: rgba(255, 92, 122, 0.12);
+}
+
+.field.is-invalid .input {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(255, 92, 122, 0.16);
+}
+
+.field__error {
+  color: #ff9aa9;
+  font-size: var(--fs-xs);
+}
+
+.toast--danger {
+  border-left-color: var(--red);
+  box-shadow: var(--shadow-2), 0 0 40px -22px rgba(255, 92, 122, 0.7);
+}
+
+.toast--success {
+  border-left-color: var(--lime);
+  box-shadow: var(--shadow-2), 0 0 40px -22px rgba(168, 255, 62, 0.55);
+}
+
+.notes-preview pre {
+  margin: 0 0 var(--sp-2);
+  padding: var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xs);
+  background: rgba(0, 0, 0, 0.35);
+  overflow-x: auto;
+}
+
+.notes-preview pre code {
+  padding: 0;
+  background: none;
+  color: #9fe8ff;
+  font-size: 0.86em;
+}
+
+.notes-preview blockquote {
+  margin: 0 0 var(--sp-2);
+  padding-left: var(--sp-2);
+  border-left: 2px solid var(--line-strong);
+  color: var(--muted);
+}
+
+.notes-preview ol {
+  margin: 0 0 var(--sp-2);
+  padding-left: 1.3em;
+  list-style: decimal;
+}
+
+.notes-preview a {
+  color: var(--accent);
+}
+
+.subtask--empty {
+  color: var(--muted-dim);
+  font-size: var(--fs-xs);
+  font-style: italic;
+  padding: 2px 4px;
+}
+
+/* En pantallas táctiles no existe el hover: dejamos las acciones siempre visibles. */
+@media (hover: none) {
+  .task__edit,
+  .task__move,
+  .project-item__more {
+    opacity: 1;
+  }
 }
