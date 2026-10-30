@@ -1,6 +1,6 @@
 {
   "name": "estado-proyectos",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Tablero kanban para llevar el control del estado de mis proyectos de software: pendientes, en proceso, bloqueados y completados.",
   "scripts": {
