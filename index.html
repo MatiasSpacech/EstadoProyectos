@@ -170,7 +170,7 @@
   </template>
 
   <template id="tpl-task">
-    <article class="task" draggable="true" tabindex="0" role="listitem">
+    <article class="task" draggable="true" tabindex="0" role="listitem" data-action="edit-task">
       <div class="task__top">
         <span class="task__grip" aria-hidden="true" title="Arrastrar">⠿</span>
         <h3 class="task__title"></h3>
@@ -370,6 +370,7 @@
   <script defer src="js/storage.js"></script>
   <script defer src="js/seed.js"></script>
   <script defer src="js/state.js"></script>
+  <script defer src="js/render.js"></script>
   <script defer src="js/app.js"></script>
 </body>
 </html>

@@ -16,6 +16,8 @@ test.describe("carga inicial", () => {
     await expect(page.locator("#btn-new-project")).toBeVisible();
     await expect(page.locator("#btn-new-task")).toBeVisible();
     await expect(page.locator("#project-title")).toBeVisible();
+    await expect(page.locator("#board .column")).toHaveCount(4);
+    await expect(page.locator("#board .task")).not.toHaveCount(0);
 
     expect(errors).toEqual([]);
   });

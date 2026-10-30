@@ -146,6 +146,10 @@
   display: none;
 }
 
+#btn-menu {
+  display: none;
+}
+
 .topbar__id {
   flex: 1 1 240px;
   min-width: 0;
@@ -237,7 +241,7 @@
 
 .board {
   display: grid;
-  grid-template-columns: repeat(4, minmax(250px, 1fr));
+  grid-template-columns: repeat(var(--board-cols, 4), minmax(250px, 1fr));
   gap: var(--sp-4);
   align-items: start;
 }
@@ -282,6 +286,10 @@
   }
 
   .topbar__menu {
+    display: inline-flex;
+  }
+
+  #btn-menu {
     display: inline-flex;
   }
 }
