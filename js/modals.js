@@ -19,6 +19,45 @@
     return document.getElementById(id).content.firstElementChild.cloneNode(true);
   }
 
+  /** Elementos enfocables visibles dentro de un contenedor. */
+  function focusableElements(container) {
+    const selector = [
+      "a[href]",
+      "button:not([disabled])",
+      'input:not([disabled]):not([type="hidden"])',
+      "select:not([disabled])",
+      "textarea:not([disabled])",
+      '[tabindex]:not([tabindex="-1"])',
+    ].join(",");
+
+    return Array.from(container.querySelectorAll(selector)).filter(
+      (element) => element.getClientRects().length > 0 && !element.closest("[hidden]")
+    );
+  }
+
+  /** Mantiene el foco dentro del diálogo (algunos navegadores lo sueltan en <body>). */
+  function trapFocus(dialog) {
+    dialog.addEventListener("keydown", (event) => {
+      if (event.key !== "Tab") return;
+      const focusables = focusableElements(dialog);
+      if (!focusables.length) {
+        event.preventDefault();
+        return;
+      }
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+
+      if (event.shiftKey && (active === first || !dialog.contains(active))) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (active === last || !dialog.contains(active))) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+  }
+
   function openDialog(dialog, onClose) {
     const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
@@ -58,6 +97,8 @@
       event.preventDefault();
       dialog.__finish("cancel");
     });
+
+    trapFocus(dialog);
 
     // Clic en el fondo = cerrar.
     dialog.addEventListener("click", (event) => {

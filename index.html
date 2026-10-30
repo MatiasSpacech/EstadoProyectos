@@ -336,9 +336,11 @@
 
           <label class="field">
             <span class="field__label">Notas <small>(markdown básico)</small></span>
-            <textarea class="input" name="notes" rows="4" placeholder="**Importante:** revisar el contrato&#10;- paso uno&#10;- `npm test`"></textarea>
+            <div class="notes-grid">
+              <textarea class="input" name="notes" rows="4" placeholder="**Importante:** revisar el contrato&#10;- paso uno&#10;- `npm test`"></textarea>
+              <div class="notes-preview" data-notes-preview hidden></div>
+            </div>
           </label>
-          <div class="notes-preview" data-notes-preview hidden></div>
         </div>
         <footer class="dialog__foot">
           <button class="btn btn--danger-ghost" type="button" data-action="delete-task" hidden>Eliminar</button>

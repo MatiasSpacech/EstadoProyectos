@@ -173,6 +173,15 @@
       App.modals.openTask(card.dataset.taskId, { projectId: card.dataset.projectId });
     });
 
+    // Enter o Espacio sobre una tarjeta enfocada abre su detalle.
+    on(document, "keydown", ".task", (event, card) => {
+      if (event.target !== card) return;
+      if (event.key !== "Enter" && event.key !== " ") return;
+      if (event.repeat) return;
+      event.preventDefault();
+      App.modals.openTask(card.dataset.taskId, { projectId: card.dataset.projectId });
+    });
+
     on(document, "click", '[data-action="project-menu"]', (event, button) => {
       event.stopPropagation();
       const projectId = button.dataset.projectId || App.state.get().activeProjectId;

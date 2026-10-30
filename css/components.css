@@ -686,7 +686,7 @@ textarea.input {
 
 .dialog {
   width: min(620px, calc(100vw - 32px));
-  max-height: min(86dvh, 820px);
+  max-height: min(92dvh, 880px);
   margin: auto;
   padding: 0;
   border: 1px solid var(--line-strong);
@@ -751,7 +751,7 @@ textarea.input {
 }
 
 .dialog__body--task {
-  gap: var(--sp-4);
+  gap: var(--sp-3);
 }
 
 .dialog__text {
@@ -767,6 +767,7 @@ textarea.input {
   padding: var(--sp-3) var(--sp-5);
   border-top: 1px solid var(--line);
   background: rgba(6, 9, 17, 0.5);
+  box-shadow: 0 -22px 26px -26px rgba(0, 0, 0, 0.95);
 }
 
 .dialog__spacer {
@@ -774,13 +775,27 @@ textarea.input {
 }
 
 .notes-preview {
+  max-height: 148px;
+  overflow-y: auto;
   padding: var(--sp-3);
-  border: 1px dashed var(--line-strong);
+  border: 1px solid var(--line);
   border-radius: var(--r-sm);
-  background: rgba(6, 9, 17, 0.45);
+  background: rgba(6, 9, 17, 0.55);
   color: var(--text-soft);
   font-size: var(--fs-sm);
   line-height: 1.6;
+}
+
+.notes-grid {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+@media (min-width: 620px) {
+  .notes-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
 }
 
 .notes-preview > :first-child {
