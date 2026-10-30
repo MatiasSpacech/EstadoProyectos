@@ -1,0 +1,360 @@
+/* ==========================================================================
+   layout.css — estructura: shell, sidebar, topbar, vistas y responsive
+   ========================================================================== */
+
+.app {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 288px minmax(0, 1fr);
+  min-height: 100dvh;
+}
+
+/* ---------- Sidebar ---------- */
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-drawer);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  height: 100dvh;
+  padding: var(--sp-5) var(--sp-4) var(--sp-3);
+  border-right: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(16, 22, 37, 0.94), rgba(6, 8, 15, 0.9)),
+    var(--bg);
+  backdrop-filter: blur(14px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding-inline: var(--sp-1);
+}
+
+.brand__mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  border: 1px solid var(--line-strong);
+  background: linear-gradient(160deg, var(--surface-2), var(--surface));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), var(--glow-accent);
+}
+
+.brand__bar {
+  position: absolute;
+  width: 6px;
+  border-radius: 3px;
+}
+
+.brand__bar--a {
+  height: 20px;
+  left: 11px;
+  background: var(--cyan);
+  box-shadow: 0 0 10px rgba(34, 230, 255, 0.8);
+}
+
+.brand__bar--b {
+  height: 12px;
+  right: 11px;
+  top: 11px;
+  background: var(--magenta);
+  box-shadow: 0 0 10px rgba(255, 62, 200, 0.8);
+}
+
+.brand__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.brand__text strong {
+  font-size: 1.02rem;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 18px rgba(34, 230, 255, 0.35);
+}
+
+.brand__text strong span {
+  color: var(--cyan);
+}
+
+.brand__text small {
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.sidebar__tools {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.sidebar__nav {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin-inline: calc(var(--sp-2) * -1);
+  padding: var(--sp-1) var(--sp-2);
+}
+
+.sidebar__empty {
+  padding: var(--sp-4) var(--sp-3);
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  text-align: center;
+}
+
+.sidebar__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- Topbar ---------- */
+
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100dvh;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-3) var(--sp-5);
+  border-bottom: 1px solid var(--line);
+  background: rgba(6, 8, 15, 0.66);
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
+.topbar__menu {
+  display: none;
+}
+
+.topbar__id {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+.topbar__title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+
+.topbar__title {
+  font-size: var(--fs-xl);
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 0 26px var(--accent-glow);
+}
+
+.topbar__desc {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+.topbar__progress {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-1) var(--sp-3) var(--sp-1) var(--sp-1);
+  border-radius: var(--r-full);
+  border: 1px solid var(--line);
+  background: rgba(19, 26, 42, 0.7);
+}
+
+.topbar__progress-text {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+  min-width: 4ch;
+  text-align: right;
+}
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* ---------- Filtros ---------- */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-5);
+  border-bottom: 1px solid var(--line);
+}
+
+.filters .search {
+  flex: 1 1 260px;
+  max-width: 460px;
+}
+
+/* ---------- Vistas ---------- */
+
+.view {
+  flex: 1 1 auto;
+  padding: var(--sp-5);
+  min-width: 0;
+}
+
+.view--board {
+  padding: var(--sp-4) var(--sp-5) var(--sp-5);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(250px, 1fr));
+  gap: var(--sp-4);
+  align-items: start;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--sp-4);
+}
+
+/* ---------- Overlay del drawer ---------- */
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  background: rgba(3, 5, 10, 0.66);
+  backdrop-filter: blur(3px);
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 1180px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(320px, 86vw);
+    transform: translateX(-104%);
+    transition: transform var(--dur-lg) var(--ease-out);
+    box-shadow: none;
+  }
+
+  .app.is-sidebar-open .sidebar {
+    transform: none;
+    box-shadow: var(--shadow-3);
+  }
+
+  .topbar__menu {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 960px) {
+  .board {
+    display: flex;
+    gap: var(--sp-3);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    padding-bottom: var(--sp-3);
+    margin-inline: calc(var(--sp-4) * -1);
+    padding-inline: var(--sp-4);
+  }
+
+  .board > .column {
+    flex: 0 0 min(320px, 82vw);
+    scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 760px) {
+  .topbar {
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    padding: var(--sp-3) var(--sp-4);
+  }
+
+  .topbar__id {
+    flex: 1 1 60%;
+    order: 1;
+  }
+
+  .topbar__progress {
+    order: 2;
+  }
+
+  .topbar__actions {
+    order: 3;
+    flex: 1 1 100%;
+    justify-content: flex-end;
+  }
+
+  .filters {
+    padding: var(--sp-3) var(--sp-4);
+  }
+
+  .view {
+    padding: var(--sp-4);
+  }
+}
+
+@media (max-width: 640px) {
+  .board {
+    display: grid;
+    grid-template-columns: 1fr;
+    overflow: visible;
+    scroll-snap-type: none;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+
+  .board > .column {
+    flex: none;
+  }
+
+  .topbar__desc,
+  .topbar__progress {
+    display: none;
+  }
+
+  .segmented {
+    flex: 1 1 auto;
+  }
+}

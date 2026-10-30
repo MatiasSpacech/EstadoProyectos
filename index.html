@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#06080f">
+  <meta name="description" content="Tablero kanban dark/neon para controlar el estado de mis proyectos de software.">
+  <title>EstadoProyectos · tablero de proyectos</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2306080f'/%3E%3Cpath d='M9 9h6v14H9z' fill='%2322e6ff'/%3E%3Cpath d='M17 9h6v8h-6z' fill='%23ff3ec8'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <a class="skip-link" href="#board">Saltar al tablero</a>
+
+  <div class="app" id="app">
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sidebar" id="sidebar" aria-label="Proyectos">
+      <div class="brand">
+        <span class="brand__mark" aria-hidden="true">
+          <span class="brand__bar brand__bar--a"></span>
+          <span class="brand__bar brand__bar--b"></span>
+        </span>
+        <span class="brand__text">
+          <strong>Estado<span>Proyectos</span></strong>
+          <small>control de proyectos</small>
+        </span>
+      </div>
+
+      <div class="sidebar__tools">
+        <label class="search search--compact">
+          <span class="sr-only">Buscar proyecto</span>
+          <input id="project-search" type="search" placeholder="Buscar proyecto…" autocomplete="off" spellcheck="false">
+        </label>
+        <button class="btn btn--primary btn--block" type="button" id="btn-new-project" data-action="new-project">
+          <span aria-hidden="true">＋</span> Nuevo proyecto
+        </button>
+      </div>
+
+      <nav class="sidebar__nav" aria-label="Lista de proyectos">
+        <ul class="project-list" id="project-list" role="list"></ul>
+        <p class="sidebar__empty" id="project-list-empty" hidden>Sin proyectos. Creá el primero.</p>
+      </nav>
+
+      <details class="archived" id="archived-section" hidden>
+        <summary class="archived__summary">
+          <span>Archivados</span>
+          <span class="archived__count" id="archived-count">0</span>
+        </summary>
+        <ul class="project-list project-list--archived" id="archived-list" role="list"></ul>
+      </details>
+
+      <footer class="sidebar__foot">
+        <button class="btn btn--ghost btn--sm" type="button" data-action="export" title="Descargar un backup JSON">Exportar</button>
+        <button class="btn btn--ghost btn--sm" type="button" data-action="import" title="Restaurar desde un backup JSON">Importar</button>
+        <button class="btn btn--ghost btn--sm" type="button" data-action="restore-demo" title="Volver a los datos de ejemplo">Demo</button>
+        <button class="btn btn--danger-ghost btn--sm" type="button" data-action="wipe" title="Borrar todos los datos">Borrar</button>
+        <input type="file" id="import-file" accept="application/json,.json" hidden>
+      </footer>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebar-overlay" data-action="close-sidebar" hidden></div>
+
+    <!-- ============ MAIN ============ -->
+    <main class="main" id="main">
+      <header class="topbar">
+        <button class="icon-btn topbar__menu" type="button" id="btn-menu" data-action="toggle-sidebar"
+                aria-label="Mostrar proyectos" aria-expanded="false" aria-controls="sidebar">☰</button>
+
+        <div class="topbar__id">
+          <div class="topbar__title-row">
+            <span class="accent-dot" id="project-accent" aria-hidden="true"></span>
+            <h1 class="topbar__title" id="project-title">Cargando…</h1>
+            <span class="pill" id="project-archived-pill" hidden>Archivado</span>
+          </div>
+          <p class="topbar__desc" id="project-desc"></p>
+          <div class="topbar__meta" id="project-meta"></div>
+        </div>
+
+        <div class="topbar__progress" id="progress-wrap">
+          <svg class="ring" viewBox="0 0 44 44" role="img" aria-labelledby="progress-text">
+            <circle class="ring__track" cx="22" cy="22" r="18"></circle>
+            <circle class="ring__value" id="ring-value" cx="22" cy="22" r="18"></circle>
+          </svg>
+          <span class="topbar__progress-text" id="progress-text">0%</span>
+        </div>
+
+        <div class="topbar__actions">
+          <div class="segmented" role="group" aria-label="Vista">
+            <button type="button" class="segmented__btn is-active" id="btn-view-board" data-action="view" data-view="board" aria-pressed="true">Tablero</button>
+            <button type="button" class="segmented__btn" id="btn-view-dashboard" data-action="view" data-view="dashboard" aria-pressed="false">Panel</button>
+          </div>
+          <button class="btn btn--primary" type="button" id="btn-new-task" data-action="new-task">
+            <span aria-hidden="true">＋</span> Tarea
+          </button>
+          <button class="icon-btn" type="button" id="btn-project-menu" data-action="project-menu"
+                  aria-label="Opciones del proyecto" aria-haspopup="menu" aria-expanded="false">⋯</button>
+        </div>
+      </header>
+
+      <div class="filters" id="filters">
+        <label class="search">
+          <span class="sr-only">Buscar tarea</span>
+          <input id="task-search" type="search" placeholder="Buscar tarea, nota o etiqueta…" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="select">
+          <span class="sr-only">Filtrar por prioridad</span>
+          <select id="filter-priority">
+            <option value="all">Todas las prioridades</option>
+            <option value="alta">Alta</option>
+            <option value="media">Media</option>
+            <option value="baja">Baja</option>
+          </select>
+        </label>
+        <label class="check check--inline">
+          <input type="checkbox" id="filter-hide-done"> Ocultar completadas
+        </label>
+      </div>
+
+      <!-- ============ VISTA TABLERO ============ -->
+      <section class="view view--board" id="view-board" aria-label="Tablero kanban">
+        <div class="board" id="board"></div>
+      </section>
+
+      <!-- ============ VISTA PANEL ============ -->
+      <section class="view view--dashboard" id="view-dashboard" aria-label="Panel de proyectos" hidden>
+        <div class="dashboard-grid" id="dashboard-grid"></div>
+        <p class="empty-state" id="dashboard-empty" hidden>
+          Todavía no hay proyectos. Creá uno desde el panel lateral.
+        </p>
+      </section>
+
+      <p class="empty-state empty-state--project" id="no-project" hidden>
+        No hay ningún proyecto seleccionado. Creá uno para empezar.
+      </p>
+    </main>
+  </div>
+
+  <!-- ============ PLANTILLAS ============ -->
+  <template id="tpl-project-item">
+    <li class="project-item" role="listitem">
+      <button class="project-item__btn" type="button" data-action="select-project">
+        <span class="project-item__dot" aria-hidden="true"></span>
+        <span class="project-item__body">
+          <span class="project-item__name"></span>
+          <span class="project-item__meta"></span>
+        </span>
+        <span class="project-item__count" aria-hidden="true"></span>
+      </button>
+      <button class="icon-btn project-item__more" type="button" data-action="project-menu"
+              aria-label="Opciones del proyecto" aria-haspopup="menu" aria-expanded="false">⋯</button>
+    </li>
+  </template>
+
+  <template id="tpl-column">
+    <section class="column" data-status="" aria-labelledby="col-title-">
+      <header class="column__head">
+        <span class="column__dot" aria-hidden="true"></span>
+        <h2 class="column__title"></h2>
+        <span class="column__count" aria-label="tareas">0</span>
+        <button class="icon-btn icon-btn--sm" type="button" data-action="add-task"
+                aria-label="Añadir tarea a esta columna">＋</button>
+      </header>
+      <div class="column__body" data-dropzone role="list"></div>
+      <p class="column__empty">Arrastrá tareas acá</p>
+    </section>
+  </template>
+
+  <template id="tpl-task">
+    <article class="task" draggable="true" tabindex="0" role="listitem">
+      <div class="task__top">
+        <span class="task__grip" aria-hidden="true" title="Arrastrar">⠿</span>
+        <h3 class="task__title"></h3>
+        <button class="icon-btn icon-btn--sm task__edit" type="button" data-action="edit-task"
+                aria-label="Editar tarea">✎</button>
+      </div>
+      <p class="task__notes" hidden></p>
+      <ul class="task__tags" hidden></ul>
+      <div class="task__subtasks" hidden>
+        <div class="task__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <span class="task__bar-fill"></span>
+        </div>
+        <span class="task__subtasks-count"></span>
+      </div>
+      <div class="task__foot">
+        <span class="badge task__priority"></span>
+        <span class="task__due"></span>
+        <span class="task__estimate"></span>
+        <span class="task__move">
+          <button class="icon-btn icon-btn--xs" type="button" data-action="move-prev" aria-label="Mover a la columna anterior">←</button>
+          <button class="icon-btn icon-btn--xs" type="button" data-action="move-next" aria-label="Mover a la columna siguiente">→</button>
+        </span>
+      </div>
+    </article>
+  </template>
+
+  <template id="tpl-dashboard-item">
+    <article class="dash-card" data-action="open-dashboard-project">
+      <header class="dash-card__head">
+        <span class="accent-dot" aria-hidden="true"></span>
+        <h3 class="dash-card__title"></h3>
+        <span class="dash-card__pct"></span>
+      </header>
+      <p class="dash-card__desc"></p>
+      <div class="dash-card__stats"></div>
+      <div class="dash-card__bar"><span class="dash-card__bar-fill"></span></div>
+      <ul class="dash-card__next"></ul>
+    </article>
+  </template>
+
+  <template id="tpl-subtask-row">
+    <li class="subtask">
+      <label class="check check--tight">
+        <input type="checkbox" data-subtask-toggle>
+        <span class="subtask__title"></span>
+      </label>
+      <button class="icon-btn icon-btn--xs" type="button" data-action="remove-subtask" aria-label="Quitar subtarea">✕</button>
+    </li>
+  </template>
+
+  <template id="tpl-tag">
+    <li class="tag"></li>
+  </template>
+
+  <template id="tpl-dialog-confirm">
+    <dialog class="dialog dialog--sm">
+      <form class="dialog__form" method="dialog">
+        <header class="dialog__head">
+          <h2 class="dialog__title"></h2>
+        </header>
+        <div class="dialog__body">
+          <p class="dialog__text"></p>
+          <label class="check" data-confirm-extra hidden>
+            <input type="checkbox" name="extra">
+            <span></span>
+          </label>
+        </div>
+        <footer class="dialog__foot">
+          <button class="btn btn--ghost" type="button" value="cancel" data-action="close-dialog">Cancelar</button>
+          <button class="btn btn--danger" type="submit" value="confirm">Confirmar</button>
+        </footer>
+      </form>
+    </dialog>
+  </template>
+
+  <template id="tpl-dialog-project">
+    <dialog class="dialog">
+      <form class="dialog__form" method="dialog" novalidate>
+        <header class="dialog__head">
+          <h2 class="dialog__title"></h2>
+          <button class="icon-btn" type="button" data-action="close-dialog" aria-label="Cerrar">✕</button>
+        </header>
+        <div class="dialog__body">
+          <label class="field">
+            <span class="field__label">Nombre</span>
+            <input class="input" name="name" type="text" required maxlength="60" autocomplete="off" placeholder="Ej. Rediseño del sitio">
+          </label>
+          <label class="field">
+            <span class="field__label">Descripción</span>
+            <textarea class="input" name="description" rows="2" maxlength="200" placeholder="Una línea sobre el objetivo del proyecto"></textarea>
+          </label>
+          <fieldset class="field field--plain">
+            <legend class="field__label">Color de acento</legend>
+            <div class="swatches" data-swatches></div>
+          </fieldset>
+          <label class="check">
+            <input type="checkbox" name="autoComplete">
+            <span>Completar la tarea al marcar todas sus subtareas</span>
+          </label>
+        </div>
+        <footer class="dialog__foot">
+          <button class="btn btn--ghost" type="button" data-action="close-dialog">Cancelar</button>
+          <button class="btn btn--primary" type="submit">Guardar</button>
+        </footer>
+      </form>
+    </dialog>
+  </template>
+
+  <template id="tpl-dialog-task">
+    <dialog class="dialog">
+      <form class="dialog__form" method="dialog" novalidate>
+        <header class="dialog__head">
+          <h2 class="dialog__title"></h2>
+          <button class="icon-btn" type="button" data-action="close-dialog" aria-label="Cerrar">✕</button>
+        </header>
+        <div class="dialog__body dialog__body--task">
+          <label class="field">
+            <span class="field__label">Título</span>
+            <input class="input" name="title" type="text" required maxlength="120" autocomplete="off" placeholder="Ej. Implementar login con OAuth">
+          </label>
+
+          <div class="grid-2">
+            <label class="field">
+              <span class="field__label">Estado</span>
+              <select class="input" name="status"></select>
+            </label>
+            <label class="field">
+              <span class="field__label">Prioridad</span>
+              <select class="input" name="priority">
+                <option value="baja">Baja</option>
+                <option value="media">Media</option>
+                <option value="alta">Alta</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="field__label">Estimación (horas)</span>
+              <input class="input" name="estimate" type="number" min="0" max="999" step="0.5" value="0">
+            </label>
+            <label class="field">
+              <span class="field__label">Fecha límite</span>
+              <input class="input" name="dueDate" type="date">
+            </label>
+          </div>
+
+          <label class="field">
+            <span class="field__label">Etiquetas <small>(separadas por coma)</small></span>
+            <input class="input" name="tags" type="text" autocomplete="off" spellcheck="false" placeholder="ui, api, bug">
+          </label>
+
+          <label class="field" id="blocked-field" hidden>
+            <span class="field__label">Motivo del bloqueo</span>
+            <input class="input" name="blockedReason" type="text" maxlength="140" placeholder="Esperando respuesta del cliente…">
+          </label>
+
+          <div class="field">
+            <span class="field__label">Subtareas</span>
+            <ul class="subtask-list" data-subtasks></ul>
+            <div class="subtask-add">
+              <input class="input" type="text" id="subtask-input" maxlength="100" placeholder="Nueva subtarea y Enter…">
+              <button class="btn btn--ghost btn--sm" type="button" data-action="add-subtask">Añadir</button>
+            </div>
+          </div>
+
+          <label class="field">
+            <span class="field__label">Notas <small>(markdown básico)</small></span>
+            <textarea class="input" name="notes" rows="4" placeholder="**Importante:** revisar el contrato&#10;- paso uno&#10;- `npm test`"></textarea>
+          </label>
+          <div class="notes-preview" data-notes-preview hidden></div>
+        </div>
+        <footer class="dialog__foot">
+          <button class="btn btn--danger-ghost" type="button" data-action="delete-task" hidden>Eliminar</button>
+          <span class="dialog__spacer"></span>
+          <button class="btn btn--ghost" type="button" data-action="close-dialog">Cancelar</button>
+          <button class="btn btn--primary" type="submit">Guardar</button>
+        </footer>
+      </form>
+    </dialog>
+  </template>
+
+  <template id="tpl-toast">
+    <li class="toast" role="listitem">
+      <span class="toast__text"></span>
+      <button class="btn btn--ghost btn--xs toast__action" type="button" hidden>Deshacer</button>
+      <button class="icon-btn icon-btn--xs toast__close" type="button" aria-label="Cerrar aviso">✕</button>
+    </li>
+  </template>
+
+  <div id="dialog-root"></div>
+  <ul class="toast-root" id="toast-root" aria-label="Avisos"></ul>
+  <p class="sr-only" id="live-region" aria-live="polite"></p>
+
+  <noscript>
+    <p class="noscript">EstadoProyectos necesita JavaScript habilitado para funcionar.</p>
+  </noscript>
+</body>
+</html>

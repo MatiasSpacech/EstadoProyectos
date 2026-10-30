@@ -4,7 +4,7 @@
   "private": true,
   "description": "Tablero kanban para llevar el control del estado de mis proyectos de software: pendientes, en proceso, bloqueados y completados.",
   "scripts": {
-    "start": "python -m http.server 4173",
+    "start": "node tools/serve.js",
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",

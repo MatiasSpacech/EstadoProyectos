@@ -1,0 +1,116 @@
+/* ==========================================================================
+   theme.css — tokens de diseño: paleta dark, acentos neón, sombras y ritmo
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* Superficies */
+  --bg: #06080f;
+  --bg-glow-a: rgba(34, 230, 255, 0.10);
+  --bg-glow-b: rgba(255, 62, 200, 0.08);
+  --bg-glow-c: rgba(154, 107, 255, 0.07);
+  --surface: #0e1320;
+  --surface-2: #131a2a;
+  --surface-3: #1a2336;
+  --surface-hover: #1e2940;
+  --line: rgba(126, 166, 255, 0.14);
+  --line-strong: rgba(126, 166, 255, 0.28);
+
+  /* Texto */
+  --text: #e9eeff;
+  --text-soft: #b8c4e0;
+  --muted: #7d8aa8;
+  --muted-dim: #5b6883;
+
+  /* Neones */
+  --cyan: #22e6ff;
+  --magenta: #ff3ec8;
+  --violet: #9a6bff;
+  --lime: #a8ff3e;
+  --amber: #ffb020;
+  --red: #ff5c7a;
+
+  /* Semántica de estado */
+  --todo: var(--cyan);
+  --doing: var(--magenta);
+  --blocked: var(--amber);
+  --done: var(--lime);
+
+  /* Acento del proyecto (se sobreescribe inline por proyecto) */
+  --accent: var(--cyan);
+  --accent-ink: #04121a;
+  --accent-soft: rgba(34, 230, 255, 0.14);
+  --accent-glow: rgba(34, 230, 255, 0.45);
+
+  /* Radios */
+  --r-xs: 6px;
+  --r-sm: 9px;
+  --r-md: 13px;
+  --r-lg: 18px;
+  --r-full: 999px;
+
+  /* Sombras y brillos */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 10px 30px -12px rgba(0, 0, 0, 0.75);
+  --shadow-3: 0 26px 60px -20px rgba(0, 0, 0, 0.85);
+  --glow-ring: 0 0 0 1px var(--line-strong);
+  --glow-accent: 0 0 0 1px var(--accent-glow), 0 0 22px -6px var(--accent-glow);
+  --glow-accent-strong: 0 0 0 1px var(--accent), 0 0 28px -4px var(--accent-glow);
+  --glow-cyan: 0 0 0 1px rgba(34, 230, 255, 0.6), 0 0 24px -6px rgba(34, 230, 255, 0.7);
+  --glow-magenta: 0 0 0 1px rgba(255, 62, 200, 0.55), 0 0 24px -6px rgba(255, 62, 200, 0.65);
+
+  /* Tipografía */
+  --font-sans: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "JetBrains Mono", "Cascadia Code", "SF Mono", Consolas, monospace;
+  --fs-xs: 0.6875rem;
+  --fs-sm: 0.8125rem;
+  --fs-base: 0.9375rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: clamp(1.35rem, 1.2rem + 0.7vw, 1.7rem);
+
+  /* Espaciado */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 22px;
+  --sp-6: 30px;
+
+  /* Motion */
+  --dur-xs: 90ms;
+  --dur: 160ms;
+  --dur-lg: 280ms;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Capas */
+  --z-sticky: 20;
+  --z-overlay: 45;
+  --z-drawer: 50;
+  --z-dialog: 60;
+  --z-toast: 80;
+}
+
+/* Cada proyecto inyecta su acento con style="--accent: …" y estos derivados
+   se recalculan solos. color-mix tiene fallback declarado arriba (rgba cian). */
+@supports (color: color-mix(in srgb, red, blue)) {
+  :root {
+    --accent-soft: color-mix(in srgb, var(--accent) 16%, transparent);
+    --accent-glow: color-mix(in srgb, var(--accent) 48%, transparent);
+  }
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-xs: 0ms;
+    --dur: 0ms;
+    --dur-lg: 0ms;
+  }
+}
