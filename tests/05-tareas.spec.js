@@ -1,6 +1,6 @@
 "use strict";
 
-const { test, expect } = require("@playwright/test");
+const { test, expect } = require("./fixtures");
 const { open, reloadPersisted } = require("./helpers");
 
 async function openNewTask(page) {

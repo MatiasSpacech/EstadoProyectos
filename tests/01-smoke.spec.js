@@ -1,6 +1,6 @@
 "use strict";
 
-const { test, expect } = require("@playwright/test");
+const { test, expect } = require("./fixtures");
 const { watchErrors } = require("./helpers");
 
 test.describe("carga inicial", () => {

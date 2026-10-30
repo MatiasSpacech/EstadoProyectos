@@ -1,6 +1,6 @@
 "use strict";
 
-const { test, expect } = require("@playwright/test");
+const { test, expect } = require("./fixtures");
 const { open, readState, reloadPersisted } = require("./helpers");
 
 /** Arrastra una tarjeta con el ratón hasta una columna (y opcionalmente un índice). */

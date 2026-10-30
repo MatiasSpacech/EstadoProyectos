@@ -1,6 +1,6 @@
 "use strict";
 
-const { test, expect } = require("@playwright/test");
+const { test, expect } = require("./fixtures");
 const { open, readState, flush, reloadPersisted } = require("./helpers");
 
 test.describe("estado, persistencia y datos demo", () => {

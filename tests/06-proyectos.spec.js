@@ -1,7 +1,7 @@
 "use strict";
 
 const fs = require("node:fs");
-const { test, expect } = require("@playwright/test");
+const { test, expect } = require("./fixtures");
 const { open, readState, reloadPersisted } = require("./helpers");
 
 async function menuItem(page, label) {
