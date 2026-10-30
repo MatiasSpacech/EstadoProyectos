@@ -1093,6 +1093,34 @@ textarea.input {
   box-shadow: inset 0 0 24px -8px var(--accent-glow);
 }
 
+.task--ghost {
+  position: fixed;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.94;
+  border-color: var(--accent);
+  box-shadow:
+    var(--shadow-3),
+    0 0 0 1px var(--accent),
+    0 0 44px -12px var(--accent-glow);
+  transform: scale(1.02) rotate(0.6deg);
+  cursor: grabbing;
+}
+
+body.is-dragging-task {
+  cursor: grabbing;
+}
+
+body.is-touch-dragging {
+  -webkit-user-select: none;
+  user-select: none;
+  overscroll-behavior: contain;
+}
+
+body.is-touch-dragging .task {
+  touch-action: none;
+}
+
 .task__top {
   display: flex;
   align-items: flex-start;

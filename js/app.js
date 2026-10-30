@@ -23,6 +23,10 @@
       App.render.init();
     }
 
+    if (App.dnd && typeof App.dnd.init === "function") {
+      App.dnd.init();
+    }
+
     document.documentElement.dataset.app = "ready";
 
     window.addEventListener("beforeunload", () => {

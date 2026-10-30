@@ -309,7 +309,7 @@
     const template = document.getElementById("tpl-column");
     const column = template.content.firstElementChild.cloneNode(true);
     const all = project.tasks.filter((task) => task.status === status);
-    const visible = all.filter(taskMatches);
+    const visible = App.utils.sortByOrder(all).filter(taskMatches);
     const body = column.querySelector(".column__body");
     const empty = column.querySelector(".column__empty");
     const label = App.state.statusLabel(status);
